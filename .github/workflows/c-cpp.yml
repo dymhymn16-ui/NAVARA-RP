@@ -1,4 +1,4 @@
-name: NAVARA-RP Build
+name: Build NAVARA-RP
 
 on:
   push:
@@ -11,11 +11,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Download source
         uses: actions/checkout@v4
 
-      - name: Check NAVARA-RP source
-        run: |
-          echo "Checking gamemode..."
-          test -f gamemodes/new.pwn
-          echo "gamemodes/new.pwn موجود بنجاح ✅"
+      - name: Compile Pawn gamemode
+        uses: knryuu/pawn-compiler-action@v1
+        with:
+          compiler: pawno
+          source: gamemodes/new.pwn
+          includes: pawno/include
