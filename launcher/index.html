@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NAVARA-RP</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      color: white;
+      background: #05070a;
+    }
+
+    .background {
+      min-height: 100vh;
+      background:
+        linear-gradient(
+          rgba(0, 0, 0, 0.55),
+          rgba(0, 0, 0, 0.78)
+        ),
+        url("assets/background.png") center/cover no-repeat;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 25px;
+    }
+
+    .launcher {
+      width: 100%;
+      max-width: 520px;
+      text-align: center;
+    }
+
+    .logo {
+      width: 260px;
+      max-width: 80%;
+      height: auto;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 20px rgba(140, 255, 0, 0.35));
+    }
+
+    .status {
+      background: rgba(10, 15, 20, 0.88);
+      border: 1px solid rgba(140, 255, 0, 0.25);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+
+    .status-online {
+      color: #8cff00;
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+
+    .players {
+      color: #ddd;
+      font-size: 14px;
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    button {
+      width: 100%;
+      height: 58px;
+      border: none;
+      border-radius: 17px;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .play {
+      background: #35c759;
+      box-shadow: 0 6px 25px rgba(53, 199, 89, 0.25);
+    }
+
+    .normal {
+      background: rgba(25, 30, 40, 0.94);
+      border: 1px solid rgba(140, 255, 0, 0.22);
+    }
+
+    .exit {
+      background: rgba(120, 25, 25, 0.94);
+    }
+
+    .panel {
+      display: none;
+      margin-top: 18px;
+      background: rgba(10, 14, 20, 0.94);
+      border-radius: 18px;
+      padding: 20px;
+      text-align: right;
+      border: 1px solid rgba(140, 255, 0, 0.2);
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    .panel h2 {
+      margin-bottom: 15px;
+      color: #8cff00;
+    }
+
+    .panel p {
+      color: #c8c8c8;
+      line-height: 1.8;
+    }
+
+    .input {
+      width: 100%;
+      padding: 15px;
+      margin-top: 10px;
+      margin-bottom: 12px;
+      border: 1px solid #303744;
+      border-radius: 12px;
+      background: #171c25;
+      color: white;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .input:focus {
+      border-color: #8cff00;
+    }
+
+    .footer {
+      margin-top: 20px;
+      color: #888;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="background">
+
+    <main class="launcher">
+
+      <img
+        class="logo"
+        src="assets/logo.png"
+        alt="NAVARA-RP"
+      >
+
+      <section class="status">
+        <div class="status-online">● السيرفر متصل</div>
+        <div class="players">👥 اللاعبين: 0 / 1000</div>
+      </section>
+
+      <div class="menu">
+
+        <button class="play" onclick="playGame()">
+          🎮 دخول إلى اللعبة
+        </button>
+
+        <button class="normal" onclick="openPanel('settings')">
+          ⚙️ الإعدادات
+        </button>
+
+        <button class="normal" onclick="openPanel('profile')">
+          👤 الملف الشخصي
+        </button>
+
+        <button class="normal" onclick="openPanel('news')">
+          📰 الأخبار
+        </button>
+
+        <button class="exit" onclick="exitLauncher()">
+          🚪 خروج
+        </button>
+
+      </div>
+
+      <section id="settings" class="panel">
+        <h2>⚙️ الإعدادات</h2>
+
+        <p>🎨 الرسومات</p>
+        <p>🎯 معدل الإطارات FPS</p>
+        <p>🔊 الصوت</p>
+        <p>💬 إعدادات الدردشة</p>
+        <p>🎮 التحكم</p>
+        <p>📱 واجهة الهاتف و GPS</p>
+        <p>⌨️ لوحة المفاتيح</p>
+        <p>🌐 اللغة: العربية</p>
+      </section>
+
+      <section id="profile" class="panel">
+        <h2>👤 الملف الشخصي</h2>
+
+        <input
+          class="input"
+          type="text"
+          placeholder="اسم المستخدم"
+        >
+
+        <input
+          class="input"
+          type="password"
+          placeholder="كلمة المرور"
+        >
+
+        <button class="play" onclick="login()">
+          تسجيل الدخول
+        </button>
+      </section>
+
+      <section id="news" class="panel">
+        <h2>📰 آخر الأخبار</h2>
+
+        <p>
+          مرحباً بك في NAVARA-RP.
+          تابع هنا آخر أخبار وتحديثات السيرفر.
+        </p>
+      </section>
+
+      <div class="footer">
+        NAVARA-RP © 2026
+      </div>
+
+    </main>
+
+  </div>
+
+  <script>
+    function openPanel(panelName) {
+      const panels = document.querySelectorAll('.panel');
+
+      panels.forEach(panel => {
+        panel.classList.remove('active');
+      });
+
+      const panel = document.getElementById(panelName);
+
+      if (panel) {
+        panel.classList.add('active');
+        panel.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest'
+        });
+      }
+    }
+
+    function playGame() {
+      alert('جاري تشغيل NAVARA-RP 🎮');
+    }
+
+    function login() {
+      alert('تم إرسال طلب تسجيل الدخول');
+    }
+
+    function exitLauncher() {
+      alert('إغلاق اللانشر');
+    }
+  </script>
+
+</body>
+          </html>
