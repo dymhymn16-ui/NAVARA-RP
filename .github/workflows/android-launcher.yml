@@ -80,4 +80,108 @@ jobs:
 
           cat > launcher/android/app/build.gradle <<'EOF'
           plugins {
-              id '
+              id 'com.android.application'
+          }
+
+          android {
+              namespace 'com.navara.rp'
+              compileSdk 35
+
+              defaultConfig {
+                  applicationId 'com.navara.rp'
+                  minSdk 23
+                  targetSdk 35
+                  versionCode 1
+                  versionName '1.0'
+              }
+          }
+          EOF
+
+          cat > launcher/android/app/src/main/res/values/strings.xml <<'EOF'
+          <resources>
+              <string name="app_name">NAVARA-RP</string>
+          </resources>
+          EOF
+
+          cat > launcher/android/app/src/main/AndroidManifest.xml <<'EOF'
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+              <uses-permission android:name="android.permission.INTERNET" />
+
+              <application
+                  android:allowBackup="true"
+                  android:label="@string/app_name"
+                  android:theme="@style/AppTheme">
+
+                  <activity
+                      android:name=".MainActivity"
+                      android:screenOrientation="portrait"
+                      android:exported="true">
+
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN" />
+                          <category android:name="android.intent.category.LAUNCHER" />
+                      </intent-filter>
+
+                  </activity>
+
+              </application>
+
+          </manifest>
+          EOF
+
+          cat > launcher/android/app/src/main/res/values/styles.xml <<'EOF'
+          <resources>
+              <style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar">
+                  <item name="android:fontFamily">sans</item>
+                  <item name="android:windowFullscreen">true</item>
+                  <item name="android:colorAccent">#8CFF00</item>
+              </style>
+          </resources>
+          EOF
+
+          cat > launcher/android/app/src/main/java/com/navara/rp/MainActivity.java <<'EOF'
+          package com.navara.rp;
+
+          import android.app.Activity;
+          import android.os.Bundle;
+          import android.webkit.WebView;
+          import android.webkit.WebSettings;
+          import android.webkit.WebViewClient;
+
+          public class MainActivity extends Activity {
+
+              @Override
+              protected void onCreate(Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
+
+                  WebView webView = new WebView(this);
+
+                  WebSettings settings = webView.getSettings();
+                  settings.setJavaScriptEnabled(true);
+                  settings.setDomStorageEnabled(true);
+                  settings.setAllowFileAccess(true);
+
+                  webView.setWebViewClient(new WebViewClient());
+
+                  webView.loadUrl(
+                      "file:///android_asset/launcher/index.html"
+                  );
+
+                  setContentView(webView);
+              }
+          }
+          EOF
+
+      - name: Build APK
+        working-directory: launcher/android
+        run: |
+          gradle wrapper --gradle-version 8.7
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: NAVARA-RP-Launcher
+          path: launcher/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
