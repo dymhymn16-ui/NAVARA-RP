@@ -27,6 +27,7 @@
           rgba(0, 0, 0, 0.78)
         ),
         url("assets/background.png") center/cover no-repeat;
+
       display: flex;
       justify-content: center;
       align-items: center;
@@ -106,11 +107,11 @@
     .panel {
       display: none;
       margin-top: 18px;
-      background: rgba(10, 14, 20, 0.94);
-      border-radius: 18px;
-      padding: 20px;
+      background: rgba(10, 14, 20, 0.96);
+      border-radius: 20px;
+      padding: 22px;
       text-align: right;
-      border: 1px solid rgba(140, 255, 0, 0.2);
+      border: 1px solid rgba(140, 255, 0, 0.22);
     }
 
     .panel.active {
@@ -118,19 +119,14 @@
     }
 
     .panel h2 {
-      margin-bottom: 15px;
       color: #8cff00;
-    }
-
-    .panel p {
-      color: #c8c8c8;
-      line-height: 1.8;
+      margin-bottom: 18px;
+      text-align: center;
     }
 
     .input {
       width: 100%;
       padding: 15px;
-      margin-top: 10px;
       margin-bottom: 12px;
       border: 1px solid #303744;
       border-radius: 12px;
@@ -138,10 +134,40 @@
       color: white;
       font-size: 16px;
       outline: none;
+      text-align: right;
     }
 
     .input:focus {
       border-color: #8cff00;
+    }
+
+    .hint {
+      color: #999;
+      font-size: 13px;
+      margin-bottom: 14px;
+      line-height: 1.7;
+    }
+
+    .gender {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .gender button {
+      flex: 1;
+      background: #202633;
+      border: 1px solid #394150;
+    }
+
+    .gender button.selected {
+      background: #35c759;
+      border-color: #8cff00;
+    }
+
+    .back {
+      background: #303642;
+      margin-top: 10px;
     }
 
     .footer {
@@ -154,36 +180,39 @@
 
 <body>
 
-  <div class="background">
+<div class="background">
 
-    <main class="launcher">
+  <main class="launcher">
 
-      <img
-        class="logo"
-        src="assets/logo.png"
-        alt="NAVARA-RP"
-      >
+    <img
+      class="logo"
+      src="assets/logo.png"
+      alt="NAVARA-RP"
+    >
 
-      <section class="status">
-        <div class="status-online">● السيرفر متصل</div>
-        <div class="players">👥 اللاعبين: 0 / 1000</div>
-      </section>
+    <section class="status">
+      <div class="status-online">● السيرفر متصل</div>
+      <div class="players">👥 اللاعبين: 0 / 1000</div>
+    </section>
+
+    <!-- الواجهة الرئيسية -->
+    <section id="home" class="panel active">
 
       <div class="menu">
 
-        <button class="play" onclick="playGame()">
+        <button class="play" onclick="showPanel('login')">
           🎮 دخول إلى اللعبة
         </button>
 
-        <button class="normal" onclick="openPanel('settings')">
+        <button class="normal" onclick="showPanel('settings')">
           ⚙️ الإعدادات
         </button>
 
-        <button class="normal" onclick="openPanel('profile')">
+        <button class="normal" onclick="showPanel('profile')">
           👤 الملف الشخصي
         </button>
 
-        <button class="normal" onclick="openPanel('news')">
+        <button class="normal" onclick="showPanel('news')">
           📰 الأخبار
         </button>
 
@@ -193,87 +222,304 @@
 
       </div>
 
-      <section id="settings" class="panel">
-        <h2>⚙️ الإعدادات</h2>
+    </section>
 
-        <p>🎨 الرسومات</p>
-        <p>🎯 معدل الإطارات FPS</p>
-        <p>🔊 الصوت</p>
-        <p>💬 إعدادات الدردشة</p>
-        <p>🎮 التحكم</p>
-        <p>📱 واجهة الهاتف و GPS</p>
-        <p>⌨️ لوحة المفاتيح</p>
-        <p>🌐 اللغة: العربية</p>
-      </section>
+    <!-- تسجيل الدخول -->
+    <section id="login" class="panel">
 
-      <section id="profile" class="panel">
-        <h2>👤 الملف الشخصي</h2>
+      <h2>🎮 تسجيل الدخول</h2>
 
-        <input
-          class="input"
-          type="text"
-          placeholder="اسم المستخدم"
-        >
+      <input
+        id="loginUsername"
+        class="input"
+        type="text"
+        autocomplete="username"
+        placeholder="اسم المستخدم"
+      >
 
-        <input
-          class="input"
-          type="password"
-          placeholder="كلمة المرور"
-        >
+      <input
+        id="loginPassword"
+        class="input"
+        type="password"
+        autocomplete="current-password"
+        placeholder="كلمة المرور"
+      >
 
-        <button class="play" onclick="login()">
-          تسجيل الدخول
+      <button class="play" onclick="login()">
+        دخول
+      </button>
+
+      <button class="normal" onclick="showPanel('register')">
+        إنشاء حساب جديد
+      </button>
+
+      <button class="back" onclick="showPanel('home')">
+        رجوع
+      </button>
+
+    </section>
+
+    <!-- إنشاء الحساب -->
+    <section id="register" class="panel">
+
+      <h2>📝 إنشاء حساب</h2>
+
+      <p class="hint">
+        اختر اسم Roleplay مناسباً لشخصيتك، مثل:
+        Saif_Araq
+      </p>
+
+      <input
+        id="registerUsername"
+        class="input"
+        type="text"
+        autocomplete="username"
+        placeholder="اسم المستخدم"
+      >
+
+      <input
+        id="registerPassword"
+        class="input"
+        type="password"
+        autocomplete="new-password"
+        placeholder="كلمة المرور"
+      >
+
+      <input
+        id="registerPasswordConfirm"
+        class="input"
+        type="password"
+        autocomplete="new-password"
+        placeholder="تأكيد كلمة المرور"
+      >
+
+      <button class="play" onclick="registerAccount()">
+        إنشاء الحساب
+      </button>
+
+      <button class="back" onclick="showPanel('login')">
+        رجوع
+      </button>
+
+    </section>
+
+    <!-- اختيار الشخصية -->
+    <section id="character" class="panel">
+
+      <h2>👤 اختيار الشخصية</h2>
+
+      <p class="hint">
+        اختر جنس الشخصية التي تريد اللعب بها.
+      </p>
+
+      <div class="gender">
+
+        <button id="maleButton" onclick="selectGender('male')">
+          👨 ذكر
         </button>
-      </section>
 
-      <section id="news" class="panel">
-        <h2>📰 آخر الأخبار</h2>
+        <button id="femaleButton" onclick="selectGender('female')">
+          👩 أنثى
+        </button>
 
-        <p>
-          مرحباً بك في NAVARA-RP.
-          تابع هنا آخر أخبار وتحديثات السيرفر.
-        </p>
-      </section>
-
-      <div class="footer">
-        NAVARA-RP © 2026
       </div>
 
-    </main>
+      <button class="play" onclick="confirmCharacter()">
+        تأكيد الشخصية
+      </button>
 
-  </div>
+      <button class="back" onclick="showPanel('register')">
+        رجوع
+      </button>
 
-  <script>
-    function openPanel(panelName) {
-      const panels = document.querySelectorAll('.panel');
+    </section>
 
-      panels.forEach(panel => {
-        panel.classList.remove('active');
+    <!-- الإعدادات -->
+    <section id="settings" class="panel">
+
+      <h2>⚙️ الإعدادات</h2>
+
+      <p class="hint">🎨 الرسومات</p>
+      <p class="hint">🎯 معدل الإطارات FPS</p>
+      <p class="hint">🔊 الصوت</p>
+      <p class="hint">💬 إعدادات الدردشة</p>
+      <p class="hint">🎮 التحكم</p>
+      <p class="hint">📱 واجهة الهاتف و GPS</p>
+      <p class="hint">⌨️ لوحة المفاتيح</p>
+      <p class="hint">🌐 اللغة: العربية</p>
+
+      <button class="back" onclick="showPanel('home')">
+        رجوع
+      </button>
+
+    </section>
+
+    <!-- الملف الشخصي -->
+    <section id="profile" class="panel">
+
+      <h2>👤 الملف الشخصي</h2>
+
+      <p id="profileName" class="hint">
+        لم يتم تسجيل الدخول بعد.
+      </p>
+
+      <button class="back" onclick="showPanel('home')">
+        رجوع
+      </button>
+
+    </section>
+
+    <!-- الأخبار -->
+    <section id="news" class="panel">
+
+      <h2>📰 آخر الأخبار</h2>
+
+      <p class="hint">
+        مرحباً بك في NAVARA-RP.
+        تابع هنا آخر أخبار وتحديثات السيرفر.
+      </p>
+
+      <button class="back" onclick="showPanel('home')">
+        رجوع
+      </button>
+
+    </section>
+
+    <div class="footer">
+      NAVARA-RP © 2026
+    </div>
+
+  </main>
+
+</div>
+
+<script>
+
+  let selectedGender = null;
+
+  function showPanel(panelName) {
+
+    const panels = document.querySelectorAll('.panel');
+
+    panels.forEach(panel => {
+      panel.classList.remove('active');
+    });
+
+    const selectedPanel = document.getElementById(panelName);
+
+    if (selectedPanel) {
+      selectedPanel.classList.add('active');
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
       });
+    }
+  }
 
-      const panel = document.getElementById(panelName);
+  function registerAccount() {
 
-      if (panel) {
-        panel.classList.add('active');
-        panel.scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest'
-        });
-      }
+    const username =
+      document.getElementById('registerUsername').value.trim();
+
+    const password =
+      document.getElementById('registerPassword').value;
+
+    const confirmPassword =
+      document.getElementById('registerPasswordConfirm').value;
+
+    if (username.length < 3) {
+      alert('اسم المستخدم يجب أن يكون 3 أحرف أو أكثر.');
+      return;
     }
 
-    function playGame() {
-      alert('جاري تشغيل NAVARA-RP 🎮');
+    if (!/^[A-Za-z0-9_]+$/.test(username)) {
+      alert('اسم المستخدم يجب أن يحتوي على أحرف إنجليزية وأرقام و _ فقط.');
+      return;
     }
 
-    function login() {
-      alert('تم إرسال طلب تسجيل الدخول');
+    if (password.length < 6) {
+      alert('كلمة المرور يجب أن تكون 6 أحرف أو أكثر.');
+      return;
     }
 
-    function exitLauncher() {
-      alert('إغلاق اللانشر');
+    if (password !== confirmPassword) {
+      alert('كلمتا المرور غير متطابقتين.');
+      return;
     }
-  </script>
+
+    showPanel('character');
+  }
+
+  function selectGender(gender) {
+
+    selectedGender = gender;
+
+    document
+      .getElementById('maleButton')
+      .classList.remove('selected');
+
+    document
+      .getElementById('femaleButton')
+      .classList.remove('selected');
+
+    if (gender === 'male') {
+      document
+        .getElementById('maleButton')
+        .classList.add('selected');
+    }
+
+    if (gender === 'female') {
+      document
+        .getElementById('femaleButton')
+        .classList.add('selected');
+    }
+  }
+
+  function confirmCharacter() {
+
+    if (!selectedGender) {
+      alert('يرجى اختيار ذكر أو أنثى.');
+      return;
+    }
+
+    const username =
+      document.getElementById('registerUsername').value.trim();
+
+    document.getElementById('profileName').textContent =
+      'الحساب: ' + username;
+
+    alert('تم اختيار الشخصية بنجاح.');
+
+    showPanel('profile');
+  }
+
+  function login() {
+
+    const username =
+      document.getElementById('loginUsername').value.trim();
+
+    const password =
+      document.getElementById('loginPassword').value;
+
+    if (!username || !password) {
+      alert('يرجى كتابة اسم المستخدم وكلمة المرور.');
+      return;
+    }
+
+    document.getElementById('profileName').textContent =
+      'الحساب: ' + username;
+
+    alert('تم تسجيل الدخول بنجاح.');
+
+    showPanel('profile');
+  }
+
+  function exitLauncher() {
+    alert('إغلاق اللانشر');
+  }
+
+</script>
 
 </body>
-          </html>
+</html>
