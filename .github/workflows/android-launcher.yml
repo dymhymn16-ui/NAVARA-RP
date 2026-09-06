@@ -1,0 +1,83 @@
+name: Build NAVARA-RP Android Launcher
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "launcher/**"
+      - ".github/workflows/android-launcher.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Setup Android
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK
+        run: |
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Create Android Launcher
+        shell: bash
+        run: |
+          set -e
+
+          mkdir -p launcher/android/app/src/main/assets/launcher/assets
+          mkdir -p launcher/android/app/src/main/java/com/navara/rp
+          mkdir -p launcher/android/app/src/main/res/values
+
+          cp launcher/index.html \
+            launcher/android/app/src/main/assets/launcher/index.html
+
+          cp launcher/assets/logo.png \
+            launcher/android/app/src/main/assets/launcher/assets/logo.png
+
+          cp launcher/assets/background.png \
+            launcher/android/app/src/main/assets/launcher/assets/background.png
+
+          cat > launcher/android/settings.gradle <<'EOF'
+          pluginManagement {
+              repositories {
+                  google()
+                  mavenCentral()
+                  gradlePluginPortal()
+              }
+          }
+
+          dependencyResolutionManagement {
+              repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
+
+          rootProject.name = "NAVARA-RP-Android-Launcher"
+          include(":app")
+          EOF
+
+          cat > launcher/android/build.gradle <<'EOF'
+          plugins {
+              id 'com.android.application' version '8.6.1' apply false
+          }
+          EOF
+
+          cat > launcher/android/gradle.properties <<'EOF'
+          org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+          android.useAndroidX=true
+          EOF
+
+          cat > launcher/android/app/build.gradle <<'EOF'
+          plugins {
+              id '
